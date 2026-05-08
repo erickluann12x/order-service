@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "orders")
-public class order {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_id")
@@ -38,7 +37,7 @@ public class order {
     @Nullable
     private Integer totalAmount;
     @Enumerated(EnumType.STRING)
-    private statusOrder status;
+    private StatusOrder status;
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

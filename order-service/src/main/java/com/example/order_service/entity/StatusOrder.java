@@ -1,6 +1,6 @@
 package com.example.order_service.entity;
 
-public enum statusOrder {
+public enum StatusOrder {
     PENDING,
     PAID,
     CANCELED;
