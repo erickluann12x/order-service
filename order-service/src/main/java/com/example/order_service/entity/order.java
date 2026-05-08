@@ -14,6 +14,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -31,9 +35,11 @@ public class order {
 
     @Nullable
     private String name;
+    @Nullable
     private Integer totalAmount;
     @Enumerated(EnumType.STRING)
     private statusOrder status;
-
-    private String createdAt;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 }
