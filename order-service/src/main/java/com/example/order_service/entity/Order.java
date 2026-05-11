@@ -35,9 +35,13 @@ public class Order {
     @Nullable
     private String name;
     @Nullable
+    private String email;
+    @Nullable
     private Integer totalAmount;
+
     @Enumerated(EnumType.STRING)
     private StatusOrder status;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
