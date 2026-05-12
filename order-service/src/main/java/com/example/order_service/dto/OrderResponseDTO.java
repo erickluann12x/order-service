@@ -4,6 +4,10 @@ import com.example.order_service.entity.StatusOrder;
 
 import java.time.LocalDateTime;
 
-public record OrderResponseDTO(Long id, String name, String email, Integer totalAmount, StatusOrder status,
+public record OrderResponseDTO(Long id,
+                               String name,
+                               String email,
+                               Integer totalAmount,
+                               StatusOrder status,
                                LocalDateTime createdAt) {
 }
