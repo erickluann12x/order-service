@@ -1,9 +1,12 @@
 package com.example.order_service.service;
 
 import com.example.order_service.dto.OrderRequestDTO;
+import com.example.order_service.dto.OrderResponseDTO;
 import com.example.order_service.entity.Order;
 import com.example.order_service.entity.StatusOrder;
+import com.example.order_service.exception.OrderNotFoundException;
 import com.example.order_service.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
@@ -28,5 +32,19 @@ public class OrderService {
 
     public List<Order> IfindAllOrders(){
         return orderRepository.findAll();
+    }
+
+    public OrderResponseDTO IfindOrderById(Long id){
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Pedido com ID "+ id +" não encontrado"));
+                return mapToResponse(order);
+    }
+    private OrderResponseDTO mapToResponse(Order order){
+        return new OrderResponseDTO(order.getId(),
+                order.getName(),
+                order.getEmail(),
+                order.getTotalAmount()
+                ,order.getStatus()
+                ,order.getCreatedAt());
     }
 }
