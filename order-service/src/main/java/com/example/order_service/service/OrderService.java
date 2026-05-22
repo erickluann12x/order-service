@@ -7,6 +7,7 @@ import com.example.order_service.entity.StatusOrder;
 import com.example.order_service.exception.OrderNotFoundException;
 import com.example.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
 
-    public Order createOrder(OrderRequestDTO orderRequestDTO){
+    public Order createOrder(OrderRequestDTO orderRequestDTO) {
         Order order = new Order();
         order.setName(orderRequestDTO.name());
         order.setEmail(orderRequestDTO.email());
@@ -30,21 +31,30 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public List<Order> IfindAllOrders(){
+    public List<Order> IfindAllOrders() {
         return orderRepository.findAll();
     }
 
-    public OrderResponseDTO IfindOrderById(Long id){
+    public OrderResponseDTO IfindOrderById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Pedido com ID "+ id +" não encontrado"));
-                return mapToResponse(order);
+                .orElseThrow(() -> new OrderNotFoundException("Pedido com ID " + id + " não encontrado"));
+        return mapToResponse(order);
     }
-    private OrderResponseDTO mapToResponse(Order order){
+
+    private OrderResponseDTO mapToResponse(Order order) {
         return new OrderResponseDTO(order.getId(),
                 order.getName(),
                 order.getEmail(),
                 order.getTotalAmount()
-                ,order.getStatus()
-                ,order.getCreatedAt());
+                , order.getStatus()
+                , order.getCreatedAt());
+    }
+
+    public OrderResponseDTO IupdateOrderStatus(Long id, StatusOrder newStatus) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Pedido com ID " + id + " não encontrado"));
+        order.setStatus(StatusOrder.PAID);
+        Order updatedOrder = orderRepository.save(order);
+        return mapToResponse(order);
     }
 }
