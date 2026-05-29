@@ -5,10 +5,9 @@ import com.example.order_service.dto.OrderResponseDTO;
 import com.example.order_service.entity.Order;
 import com.example.order_service.entity.StatusOrder;
 import com.example.order_service.exception.OrderNotFoundException;
+import com.example.order_service.mapper.OrderMapper;
 import com.example.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,8 +16,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
+
+
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
 
     public Order createOrder(OrderRequestDTO orderRequestDTO) {
@@ -38,16 +39,7 @@ public class OrderService {
     public OrderResponseDTO IfindOrderById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido com ID " + id + " não encontrado"));
-        return mapToResponse(order);
-    }
-
-    private OrderResponseDTO mapToResponse(Order order) {
-        return new OrderResponseDTO(order.getId(),
-                order.getName(),
-                order.getEmail(),
-                order.getTotalAmount()
-                , order.getStatus()
-                , order.getCreatedAt());
+        return orderMapper.ToResponse(order);
     }
 
     public OrderResponseDTO IupdateOrderStatus(Long id, StatusOrder newStatus) {
@@ -55,6 +47,6 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Pedido com ID " + id + " não encontrado"));
         order.setStatus(StatusOrder.PAID);
         Order updatedOrder = orderRepository.save(order);
-        return mapToResponse(order);
+        return orderMapper.ToResponse(order);
     }
 }
