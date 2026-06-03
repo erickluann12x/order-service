@@ -1,5 +1,6 @@
 package com.example.order_service.entity;
 
+import com.example.order_service.entity.payment.PaymentMethod;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -37,19 +40,26 @@ public class Order {
             sequenceName = "order_sequence",
             allocationSize = 1
     )
-    private Long id ;
+    private Long id;
 
     @Nullable
     private String name;
     @Nullable
-    private String email;
+    private String customerEmail;
     @Nullable
-    private Integer totalAmount;
+    private BigDecimal totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod method;
 
     @Enumerated(EnumType.STRING)
     private StatusOrder status;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at",nullable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+    }
 }

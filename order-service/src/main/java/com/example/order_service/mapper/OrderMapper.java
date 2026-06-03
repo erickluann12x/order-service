@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
 
-    public OrderResponseDTO ToResponse(Order order) {
+    public OrderResponseDTO toResponse(Order order) {
         return new OrderResponseDTO(order.getId(),
                 order.getName(),
-                order.getEmail(),
-                order.getTotalAmount()
-                , order.getStatus()
-                , order.getCreatedAt());
+                order.getCustomerEmail(),
+                order.getTotalAmount(),
+                order.getStatus(),
+                order.getCreatedAt());
     }
 }
