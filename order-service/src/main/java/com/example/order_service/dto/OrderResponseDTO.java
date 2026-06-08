@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record OrderResponseDTO(Long id,
                                String name,
-                               String customeremail,
+                               String customerEmail,
                                BigDecimal totalAmount,
                                StatusOrder status,
                                LocalDateTime createdAt) {

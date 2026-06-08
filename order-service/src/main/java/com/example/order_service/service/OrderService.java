@@ -10,10 +10,12 @@ import com.example.order_service.entity.StatusOrder;
 import com.example.order_service.entity.payment.PaymentMethod;
 import com.example.order_service.entity.payment.PaymentStatus;
 import com.example.order_service.exception.OrderNotFoundException;
+import com.example.order_service.exception.PaymentServiceUnavailableException;
 import com.example.order_service.mapper.OrderMapper;
 import com.example.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,8 +44,17 @@ public class OrderService {
                         savedOrder.getCustomerEmail(),
                         savedOrder.getTotalAmount(),
                         PaymentMethod.PIX);
-        PaymentResponseDTO paymentResponseDTO =
-                paymentClient.createPayment(paymentRequestDTO);
+
+        PaymentResponseDTO paymentResponseDTO;
+
+        try {
+            paymentResponseDTO=
+            paymentClient.createPayment(paymentRequestDTO);
+
+        }catch (ResourceAccessException e){
+            throw new PaymentServiceUnavailableException("Payment Service está indisponivel");
+        }
+
         if (paymentResponseDTO.getStatus() == PaymentStatus.APPROVED) {
             savedOrder.setStatus(StatusOrder.PAID);
         } else {

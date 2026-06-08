@@ -13,4 +13,13 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
+    @ExceptionHandler(PaymentServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentUnavailable(PaymentServiceUnavailableException ex){
+
+        ErrorResponse error = new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE.value(),
+                ex.getMessage(),
+                java.time.LocalDateTime.now());
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
+    }
 }
