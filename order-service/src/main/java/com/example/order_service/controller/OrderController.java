@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/order")
@@ -37,12 +38,12 @@ public class OrderController {
         return ResponseEntity.ok(orderList);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDTO> findOrderById(@PathVariable Long id ){
+    public ResponseEntity<OrderResponseDTO> findOrderById(@PathVariable UUID id ){
         OrderResponseDTO response = orderService.IfindOrderById(id);
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable Long id){
+    public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable UUID id){
         OrderResponseDTO response = orderService.IupdateOrderStatus(id, StatusOrder.PAID);
         return ResponseEntity.ok(response);
     }

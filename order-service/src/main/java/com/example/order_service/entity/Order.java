@@ -21,6 +21,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Getter
@@ -32,15 +33,9 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "order_sequence")
-    @SequenceGenerator(
-            name = "order_sequence",
-            sequenceName = "order_sequence",
-            allocationSize = 1
-    )
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+
+    private UUID id;
 
     @Nullable
     private String name;
